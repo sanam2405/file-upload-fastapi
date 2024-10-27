@@ -1,6 +1,6 @@
 # File Upload Service
 
-A simple started template for _file upload service_ with
+A simple starter template for _file upload service_ with
 
 - FastAPI Backend
 - Next.JS Frontend
@@ -17,4 +17,10 @@ uvicorn main:app --reload
 
 ```bash
 npm run dev
+```
+
+## Running with Docker
+
+```bash
+docker compose up
 ```

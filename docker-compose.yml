@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: file-upload-frontend
+    build:
+      context: ./frontend
+      target: dev
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend:/app # Bind mount for hot reloading in development
+      - /app/node_modules # Avoid overwriting node_modules
+
+  backend:
+    container_name: file-upload-backend
+    build:
+      context: ./backend
+    ports:
+      - '8000:8000'
+    environment:
+      - ENVIRONMENT=development
+    volumes:
+      - ./backend:/code # Bind mount for hot reloading in development
+    depends_on:
+      - frontend # Ensures backend starts after frontend if needed
+
+networks:
+  default:
+    driver: bridge
