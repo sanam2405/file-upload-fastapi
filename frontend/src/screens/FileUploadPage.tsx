@@ -22,39 +22,59 @@ export default function FileUploadPage() {
   };
 
   const handleSubmit = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("username", name);
-      files.forEach((file) => {
-        formData.append("file", file);
-      });
-
-      console.log(formData);
-
-      const response = await axios.post(
-        `${BASE_API_URI}/file-upload`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-
-      console.log("Response:", response.data);
-      if (response.status == 200) {
-        toast({
-          title: "File Uploaded Successfully",
-          description: `${files[0].name} has been uploaded successfully`,
-        });
-      }
-    } catch (error) {
-      console.error("Error uploading data:", error);
+    if (!name) {
       toast({
-        title: "Error in uploading the file",
-        description: `${files[0].name} could not be uploaded`,
+        title: "No username is provided",
+        description: "Select a username and a file before submitting",
         variant: "destructive",
       });
+    } else if (files.length == 0) {
+      toast({
+        title: "No file is provided",
+        description: "Select a username and a file before submitting",
+        variant: "destructive",
+      });
+    } else if (!name && files.length == 0) {
+      toast({
+        title: "No username and file is provided",
+        description: "Select a username and a file before submitting",
+        variant: "destructive",
+      });
+    } else {
+      try {
+        const formData = new FormData();
+        formData.append("username", name);
+        files.forEach((file) => {
+          formData.append("file", file);
+        });
+
+        console.log(formData);
+
+        const response = await axios.post(
+          `${BASE_API_URI}/file-upload`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
+        );
+
+        console.log("Response:", response.data);
+        if (response.status == 200) {
+          toast({
+            title: "File Uploaded Successfully",
+            description: `${files[0].name} has been uploaded successfully`,
+          });
+        }
+      } catch (error) {
+        console.error("Error uploading data:", error);
+        toast({
+          title: "Error in uploading the file",
+          description: `${files[0].name} could not be uploaded`,
+          variant: "destructive",
+        });
+      }
     }
   };
 
